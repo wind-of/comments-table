@@ -71,6 +71,6 @@ export default {
     margin: 25px 0;
   }
   .button{
-    margin: 10px 0;
+    margin: 10px 0 10px;
   }
 </style>
