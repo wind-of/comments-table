@@ -18,9 +18,11 @@
                       minlength="6"
                       v-model="comment.content" 
                       required/>
+            <small class="help is-danger" v-if="errors.isCommentEmpty">Comment is empty</small>
+            <small class="help is-danger" v-if="errors.hasTooLongWords">There are too long word(s)</small>
             <div class="field">
               <div class="control">
-                <button @click.prevent="editComment()" class="button is-link">Edit</button>
+                <button @click.prevent="$emit('edit', {comment})" class="button is-link">Edit</button>
               </div>
             </div>
           </div>
@@ -38,7 +40,7 @@
       </div>
       <nav class="level is-mobile" v-if="!isEditing">
         <div class="level-left">
-          <a class="level-item" @click="editComment(comment.id)">
+          <a class="level-item" @click="$emit('edit', {comment})">
             <span title="Edit" class="icon is-small"><i class="far fa-edit"></i></span>
           </a>
           <a class="level-item" @click="$emit('delete', {id: comment.id})">
@@ -52,16 +54,10 @@
 
 <script>
 export default {
-  data : () => ({
-    isEditing: false
-  }),
-  methods: {
-    editComment() {
-      this.isEditing = !this.isEditing;
-    }
-  },
   props: {
-    comment: Object
+    comment: Object,
+    errors: Object,
+    isEditing: Boolean
   }
 }
 </script>

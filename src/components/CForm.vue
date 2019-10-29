@@ -23,7 +23,7 @@
     </div>
     <div class="field">
       <div class="control">
-        <button @click.prevent="$emit('add')" class="button is-link">Add</button>
+        <button class="button is-link" @click.prevent="$emit('add')">Add</button>
       </div>
     </div>
   </form>
