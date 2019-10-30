@@ -10,42 +10,30 @@
         <div class="content">
           <p v-if="!isEditing">
             <strong>{{ comment.name }}</strong><br>
-            {{ comment.content }}
+            <span>{{ comment.content }}</span>
           </p>
-          <div v-else class="control">
-            <textarea class="textarea has-fixed-size" 
-                      placeholder="Comment" 
-                      minlength="6"
-                      v-model="comment.content" 
-                      required/>
-            <small class="help is-danger" v-if="errors.isCommentEmpty">Comment is empty</small>
-            <small class="help is-danger" v-if="errors.hasTooLongWords">There are too long word(s)</small>
+          <div v-else class="field">
+            <div class="control">
+              <textarea class="textarea has-fixed-size" placeholder="Comment" v-model="comment.content"/>
+            </div>
+            <Error v-if="errors.isCommentEmpty">Comment is empty</Error>
+            <Error v-if="errors.hasTooLongWords">There are too long word(s)</Error>
             <div class="field">
-              <div class="control">
-                <button @click.prevent="$emit('edit', {comment})" class="button is-link">Edit</button>
-              </div>
+              <Button @clicked="$emit('edit', {comment})">Edit</Button>
             </div>
           </div>
         </div>
-        <nav class="level is-mobile" v-if="!isEditing">
+        <nav class="level is-mobile" v-show="!isEditing">
           <div class="level-left">
-            <a class="level-item">
-              <span title="Reply" class="icon is-small"><i class="fas fa-reply"></i></span>
-            </a>
-            <a class="level-item">
-              <span title="Like" class="icon is-small"><i class="fas fa-heart"></i></span>
-            </a>
+            <Icon className="fas fa-reply"/>
+            <Icon className="fas fa-heart"/>
           </div>
         </nav>
       </div>
-      <nav class="level is-mobile" v-if="!isEditing">
+      <nav v-show="!isEditing" class="level is-mobile">
         <div class="level-left">
-          <a class="level-item" @click="$emit('edit', {comment})">
-            <span title="Edit" class="icon is-small"><i class="far fa-edit"></i></span>
-          </a>
-          <a class="level-item" @click="$emit('delete', {id: comment.id})">
-            <span title="Delete" class="icon is-small"><i class="far fa-trash-alt"></i></span>
-          </a>
+          <Icon className="far fa-edit"      @clicked="$emit('edit', {comment})"/>
+          <Icon className="far fa-trash-alt" @clicked="$emit('delete', {id: comment.id})"/> <!-- Переделай темплейты айконов -->
         </div>
       </nav>
     </article>
@@ -65,8 +53,5 @@ export default {
 <style lang="scss" scoped>
   .comment{
     margin: 25px 0;
-  }
-  .button{
-    margin: 10px 0;
   }
 </style>
