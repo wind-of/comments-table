@@ -7,8 +7,10 @@
                type="text" 
                placeholder="Name" 
                minlength="3"
-               v-model="currentState.name" 
+               v-model="state.name" 
                required>
+        <small class="help is-danger" v-if="state.errors.isNameEmpty">Name is empty</small>
+        <small class="help is-danger" v-if="state.errors.isNameTooLong">Name is too long. Limit is 16.</small>
       </div>
     </div>
     <div class="field">
@@ -17,8 +19,10 @@
         <textarea class="textarea has-fixed-size" 
                   placeholder="Comment" 
                   minlength="6"
-                  v-model="currentState.content" 
+                  v-model="state.content" 
                   required/>
+        <small class="help is-danger" v-if="state.errors.isCommentEmpty">Comment is empty</small>
+        <small class="help is-danger" v-if="state.errors.hasTooLongWords">There are too long word(s)</small>
       </div>
     </div>
     <div class="field">
@@ -33,7 +37,7 @@
 <script>
 export default {
   props: {
-    currentState: Object
+    state: Object,
   }
 }
 </script>

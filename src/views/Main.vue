@@ -9,13 +9,13 @@
                  @delete="deleteComment($event.id)"
                  @edit="editComment($event.comment)"/>
     </div>
-    <CForm :currentState="currentState" @add="addComment()"/>
+    <CForm :state="currentState" @add="addComment()"/>
   </div>
 </template>
 
 <script>
 import comments from '../comments'
-import utils from'../utils'
+import utils from'../utils/utils'
 
 export default {
   data() {
@@ -44,12 +44,23 @@ export default {
     createID() {return Math.floor(Math.random() * 1000000000)},
 
     addComment() {
-      const newComment = {};
-      Object.assign(newComment, this.currentState);
+      const check = utils.checkCommentForIssues(this.currentState);
 
-      this.comments.unshift(newComment);
+      if(check === 'Success') {
+        const newComment = {};
+        Object.assign(newComment, this.currentState);
 
-      this.clearState();
+        this.comments.unshift(newComment);
+
+        this.clearState();
+      } else {
+        this.currentState.errors = {
+          isCommentEmpty: check.includes('empty-comment'),
+          isNameEmpty: check.includes('empty-name'),
+          isNameTooLong: check.includes('too-long-name'),
+          hasTooLongWords: check.includes('too-long-words')
+        }
+      }
     },
 
     deleteComment(id) {this.comments = this.comments.filter(comment => comment.id !== id)},
