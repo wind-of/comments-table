@@ -1,3 +1,5 @@
+Comments component
+
 ## Project setup
 ```
 npm install
