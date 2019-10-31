@@ -1,4 +1,4 @@
-Comments component
+### Vue | Comments component
 
 ## Project setup
 ```
