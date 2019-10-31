@@ -3,24 +3,16 @@
     <div class="field">
       <label class="label">Name</label>
       <div class="control">
-        <input class="input"
-               type="text"
-               placeholder="Name" 
-               v-model="state.name">
-        <Error v-if="state.errors.isNameEmpty">Name is empty</Error>
-        <Error v-if="state.errors.isNameTooLong">Name is too long. Limit is 16.</Error>
+        <input class="input" placeholder="Name" v-model="state.name">
       </div>
+      <Error v-for="error in nameErrors" :key="error">{{ error }}</Error>
     </div>
     <div class="field">
       <label class="label">Comment</label>
       <div class="control">
-        <textarea class="textarea has-fixed-size"
-                  placeholder="Comment"
-                  minlength="6"
-                  v-model="state.content"/>
+        <textarea class="textarea has-fixed-size" placeholder="Comment" v-model="state.content"/>
       </div>
-      <Error v-if="state.errors.isCommentEmpty">Comment is empty</Error>
-      <Error v-if="state.errors.hasTooLongWords">There are too long word(s)</Error>
+      <Error v-for="error in cmErrors" :key="error">{{ error }}</Error>
       <div class="field">
         <Button @clicked="$emit('add')">Add</Button>
       </div>
@@ -33,6 +25,8 @@
 export default {
   props: {
     state: Object,
+    cmErrors: Array,
+    nameErrors: Array
   }
 }
 </script>

@@ -4,12 +4,15 @@
       <CTemplate v-for="comment of comments" 
                  :comment="comment" 
                  :key="comment.id"
-                 :errors="comment.errors"
+                 :errors="comment.errors.cmErrors"
                  :isEditing="comment.isEditing"
                  @delete="deleteComment($event.id)"
                  @edit="editComment($event.comment)"/>
     </div>
-    <CForm :state="currentState" @add="addComment()"/>
+    <CForm :state="currentState" 
+           :cmErrors="currentState.errors.cmErrors"
+           :nameErrors="currentState.errors.nameErrors"
+           @add="addComment()"/>
   </div>
 </template>
 
@@ -30,8 +33,9 @@ export default {
       }
     }
   },
+
   methods: {
-    clearState() {
+    refreshState() {
       this.currentState = {
         name: '',
         content: '',
@@ -44,43 +48,42 @@ export default {
     createID() {return Math.floor(Math.random() * 1000000000)},
 
     addComment() {
-      const check = utils.checkCommentForIssues(this.currentState);
+      const checkout = utils.checkCMForIssues(this.currentState);
+      if(checkout === 'Nice') {
+        this.currentState.errors = {
+          cmErrors: [],
+          nameErrors: []
+        };
 
-      if(check === 'Success') {
         const newComment = {};
+
         Object.assign(newComment, this.currentState);
 
         this.comments.unshift(newComment);
-
-        this.clearState();
-      } else {
+        this.refreshState();
+      } else { 
         this.currentState.errors = {
-          isCommentEmpty: check.includes('empty-comment'),
-          isNameEmpty: check.includes('empty-name'),
-          isNameTooLong: check.includes('too-long-name'),
-          hasTooLongWords: check.includes('too-long-words')
+          cmErrors: checkout.cmErrors,
+          nameErrors: checkout.nameErrors
         }
       }
     },
 
-    deleteComment(id) {this.comments = this.comments.filter(comment => comment.id !== id)},
-
     editComment(comment) {
-      if(comment.isEditing) {
-        const check = utils.checkCommentForIssues(comment);
+      if(!comment.isEditing) return comment.isEditing = !comment.isEditing
+      
+      const checkout = utils.checkCMForIssues(comment);
 
-        if (check === 'Success') {
-          return comment.isEditing = !comment.isEditing
-        } else {
-          comment.errors = {
-            isCommentEmpty: check.includes('empty-comment'),
-            hasTooLongWords: check.includes('too-long-word')
-          }
-        }
+      if (checkout === 'Nice') { 
+        return comment.isEditing = !comment.isEditing 
       } else {
-        return comment.isEditing = !comment.isEditing
+        comment.errors = {
+          cmErrors: checkout.cmErrors
+        }
       }
-    }
+    },
+
+    deleteComment(id) {this.comments = this.comments.filter(comment => comment.id !== id)}
   },
 
   components: {

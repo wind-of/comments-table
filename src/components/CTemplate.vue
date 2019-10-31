@@ -16,8 +16,7 @@
             <div class="control">
               <textarea class="textarea has-fixed-size" placeholder="Comment" v-model="comment.content"/>
             </div>
-            <Error v-if="errors.isCommentEmpty">Comment is empty</Error>
-            <Error v-if="errors.hasTooLongWords">There are too long word(s)</Error>
+            <Error v-for="error in errors" :key="error">{{ error }}</Error>
             <div class="field">
               <Button @clicked="$emit('edit', {comment})">Edit</Button>
             </div>
@@ -33,7 +32,7 @@
       <nav v-show="!isEditing" class="level is-mobile">
         <div class="level-left">
           <Icon className="far fa-edit"      @clicked="$emit('edit', {comment})"/>
-          <Icon className="far fa-trash-alt" @clicked="$emit('delete', {id: comment.id})"/> <!-- Переделай темплейты айконов -->
+          <Icon className="far fa-trash-alt" @clicked="$emit('delete', {id: comment.id})"/>
         </div>
       </nav>
     </article>
@@ -44,7 +43,7 @@
 export default {
   props: {
     comment: Object,
-    errors: Object,
+    errors: Array,
     isEditing: Boolean
   }
 }
