@@ -1,10 +1,18 @@
 <template>
   <div class="control">
-    <button class="button is-link" @click.prevent="$emit('clicked')">
+    <button :class="className">
       <slot></slot>
     </button>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    className: String
+  }
+}
+</script>
 
 
 <style lang="scss" scoped>

@@ -16,23 +16,25 @@
             <div class="control">
               <textarea class="textarea has-fixed-size" placeholder="Comment" v-model="comment.content"/>
             </div>
-            <Error v-for="error in errors" :key="error">{{ error }}</Error>
+            <BaseError v-for="error in errors" :key="error">{{ error }}</BaseError>
             <div class="field">
-              <Button @clicked="$emit('edit', {comment})">Edit</Button>
+              <BaseButton className="button is-link"
+                          @click.native.prevent="$emit('edit', {comment})">
+              Edit</BaseButton>
             </div>
           </div>
         </div>
         <nav class="level is-mobile" v-show="!isEditing">
           <div class="level-left">
-            <Icon className="fas fa-reply"/>
-            <Icon className="fas fa-heart"/>
+            <BaseIcon className="fas fa-reply"/>
+            <BaseIcon className="fas fa-heart"/>
           </div>
         </nav>
       </div>
       <nav v-show="!isEditing" class="level is-mobile">
         <div class="level-left">
-          <Icon className="far fa-edit"      @clicked="$emit('edit', {comment})"/>
-          <Icon className="far fa-trash-alt" @clicked="$emit('delete', {id: comment.id})"/>
+          <BaseIcon className="far fa-edit"      @click.native="$emit('edit', {comment})"/>
+          <BaseIcon className="far fa-trash-alt" @click.native="$emit('delete', {id: comment.id})"/>
         </div>
       </nav>
     </article>

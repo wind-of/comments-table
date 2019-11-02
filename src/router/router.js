@@ -13,6 +13,11 @@ const router = new Router({
       path: '/',
       name: 'Main',
       component: Main
+    },
+    {
+      path: '/auth',
+      name: 'Auth',
+      component: () => import('../views/Auth')
     }
   ]
 })

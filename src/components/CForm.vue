@@ -5,16 +5,18 @@
       <div class="control">
         <input class="input" placeholder="Name" v-model="state.name">
       </div>
-      <Error v-for="error in nameErrors" :key="error">{{ error }}</Error>
+      <BaseError v-for="error in nameErrors" :key="error">{{ error }}</BaseError>
     </div>
     <div class="field">
       <label class="label">Comment</label>
       <div class="control">
         <textarea class="textarea has-fixed-size" placeholder="Comment" v-model="state.content"/>
       </div>
-      <Error v-for="error in cmErrors" :key="error">{{ error }}</Error>
+      <BaseError v-for="error in cmErrors" :key="error">{{ error }}</BaseError>
       <div class="field">
-        <Button @clicked="$emit('add')">Add</Button>
+        <BaseButton className="button is-link"
+                    @click.native.prevent="$emit('add')">
+        Add</BaseButton>
       </div>
     </div>
   </form>

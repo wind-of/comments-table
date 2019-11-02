@@ -1,8 +1,6 @@
-function checkCMForIssues(comment) {
+function checkCMForIssues({name, content, isEditing}) {
   const nameErrors = [];
   const cmErrors = [];
-
-  const {name, content, id} = comment;
 
   // Comment's checkout
   content.split(' ').map(word => {
@@ -18,7 +16,7 @@ function checkCMForIssues(comment) {
   }
 
   // Name's checkout
-  if(!comment.isEditing) {
+  if(isEditing === false) {
     if(name.length > 16){
       nameErrors.push('The name is too long. Limit is 16.')
     }
@@ -28,7 +26,7 @@ function checkCMForIssues(comment) {
     }
   }
 
-  if(comment.isEditing) {
+  if(isEditing === true) {
     return cmErrors.length > 0 ? {cmErrors} : 'Nice' 
   } else {
     return cmErrors.length > 0 || nameErrors.length > 0 ? {cmErrors, nameErrors} : 'Nice'
@@ -36,4 +34,4 @@ function checkCMForIssues(comment) {
 }
 
 
-export default { checkCMForIssues };
+export default checkCMForIssues;

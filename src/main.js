@@ -9,9 +9,9 @@ import './assets/css/main.scss'
 Vue.config.productionTip = false;
 
 // Yes, the Icon Template is used only in 1 component, but this is not for long.
-Vue.component('Icon', BASE_ICON);
-Vue.component('Error', BASE_ERROR);
-Vue.component('Button', BASE_BUTTON); 
+Vue.component('BaseIcon', BASE_ICON);
+Vue.component('BaseError', BASE_ERROR);
+Vue.component('BaseButton', BASE_BUTTON); 
 
 new Vue({
   router,

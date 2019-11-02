@@ -1,5 +1,5 @@
 <template>
-  <a class="level-item" @click="$emit('clicked')">
+  <a class="level-item">
     <span title="Icon" class="icon is-small">
       <i :class="className"></i>
     </span>

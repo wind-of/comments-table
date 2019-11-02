@@ -18,7 +18,7 @@
 
 <script>
 import comments from '../comments'
-import utils from'../utils/utils'
+import checkCMForIssues from'../utils/cm-checkout'
 
 export default {
   data() {
@@ -48,18 +48,13 @@ export default {
     createID() {return Math.floor(Math.random() * 1000000000)},
 
     addComment() {
-      const checkout = utils.checkCMForIssues(this.currentState);
+      const checkout = checkCMForIssues(this.currentState);
+
       if(checkout === 'Nice') {
-        this.currentState.errors = {
-          cmErrors: [],
-          nameErrors: []
-        };
+        this.currentState.errors = {};
 
-        const newComment = {};
-
-        Object.assign(newComment, this.currentState);
-
-        this.comments.unshift(newComment);
+        this.comments.unshift(Object.assign({}, this.currentState));
+      
         this.refreshState();
       } else { 
         this.currentState.errors = {
@@ -70,9 +65,9 @@ export default {
     },
 
     editComment(comment) {
-      if(!comment.isEditing) return comment.isEditing = !comment.isEditing
+      if(comment.isEditing === false) return comment.isEditing = !comment.isEditing
       
-      const checkout = utils.checkCMForIssues(comment);
+      const checkout = checkCMForIssues(comment);
 
       if (checkout === 'Nice') { 
         return comment.isEditing = !comment.isEditing 
