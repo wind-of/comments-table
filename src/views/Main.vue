@@ -18,7 +18,7 @@
 
 <script>
 import comments from '../comments'
-import checkCMForIssues from'../utils/cm-checkout'
+import checkCMForIssues from'../utils/comment-checkout'
 
 export default {
   data() {

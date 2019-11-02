@@ -1,17 +1,43 @@
 <template>
   <div id="authentication">
-    <component v-bind:is="component"></component>
+    <keep-alive>
+      <component :is="component"
+               @sign-up="signUp($event)"
+               @sign-in="signIn($event)"
+               @toggleForm="toggleForm()"></component>
+    </keep-alive>
   </div>
 </template>
 
 
 <script>
 export default {
-  data: () => {
+  data() {
     return {
-      component: 'SignUp'
+      isUserNew: false
     }
   },
+
+  methods: {
+    signUp(user) {
+      console.log(user)
+    },
+
+    signIn(user) {
+      console.log(user)
+    },
+
+    toggleForm() {
+      this.isUserNew = !this.isUserNew
+    }
+  },
+
+  computed: {
+    component() {
+      return this.isUserNew ? 'SignUp' : 'SignIn';
+    }
+  },
+  
   components: {
     SignUp: () => import('../components/SignUp'),
     SignIn: () => import('../components/SignIn')
