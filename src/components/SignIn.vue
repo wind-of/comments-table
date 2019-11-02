@@ -5,7 +5,7 @@
     </div>
     <div class="field">
       <p class="control has-icons-left has-icons-right">
-        <input class="input" type="email" placeholder="Email" v-model="email">
+        <input class="input" type="email" placeholder="test@mail.ru" v-model="email">
         <span class="icon is-small is-left">
           <i class="fas fa-envelope"></i>
         </span>

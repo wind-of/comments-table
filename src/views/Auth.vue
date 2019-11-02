@@ -11,6 +11,8 @@
 
 
 <script>
+import UserCheckout from '../utils/user-checkout'
+
 export default {
   data() {
     return {
@@ -20,11 +22,11 @@ export default {
 
   methods: {
     signUp(user) {
-      console.log(user)
+      const checkout = UserCheckout.signingUp(user);
     },
 
     signIn(user) {
-      console.log(user)
+      const checkout = UserCheckout.signingIn(user);
     },
 
     toggleForm() {
@@ -37,7 +39,7 @@ export default {
       return this.isUserNew ? 'SignUp' : 'SignIn';
     }
   },
-  
+
   components: {
     SignUp: () => import('../components/SignUp'),
     SignIn: () => import('../components/SignIn')
