@@ -7,7 +7,7 @@ function areThereExtraCharacter(arr) {
 }
 
 
-function checkPasswordForIssues(password, user) {
+function checkPasswordForIssues(password, repeatedPassword) {
   const passwordErrors = [];
   if(password === '') {
     passwordErrors.push('You should enter your password.')
@@ -18,7 +18,7 @@ function checkPasswordForIssues(password, user) {
   else if(password.length > 16) {
     passwordErrors.push('Password is too long. The limit is 16.')
   }
-  else if(password !== repeatedPassword && user === 'new') {
+  else if(repeatedPassword && password !== repeatedPassword) {
     passwordErrors.push('Passwords should match.')
   }
 
@@ -28,7 +28,7 @@ function checkPasswordForIssues(password, user) {
 
 function checkEmailForIssues(email) {
   const emailIssues = [];
-  console.log(email);
+  
   if(email === '') {
     emailIssues.push(`E-mail can't to be empty.`) 
   } 
@@ -78,13 +78,13 @@ function checkEmailForIssues(email) {
 const AuthFormCheckout = {
   signingIn({email, password}) {
     const emailErrors = checkEmailForIssues(email);
-    const passwordErrors = checkPasswordForIssues(password, 'old');
+    const passwordErrors = checkPasswordForIssues(password);
 
     return emailErrors.length === 0 || passwordErrors.length === 0 ? 'Nice' : {emailErrors, passwordErrors};
   },
   signingUp({email, password, repeatedPassword}) {
     const emailErrors = checkEmailForIssues(email);
-    const passwordErrors = checkPasswordForIssues(password, 'new');
+    const passwordErrors = checkPasswordForIssues(password, repeatedPassword);
 
     return emailErrors.length === 0 || passwordErrors.length === 0 ? 'Nice' : {emailErrors, passwordErrors};
   }

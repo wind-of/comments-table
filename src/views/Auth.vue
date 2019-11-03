@@ -17,6 +17,7 @@
 
 <script>
 import AuthFormCheckout from '../utils/auth-checkout'
+import firebase from 'firebase'
 
 export default {
   data() {
@@ -30,20 +31,23 @@ export default {
   methods: {
     signUp(user) {
       const checkout = AuthFormCheckout.signingUp(user);
+      this.signUpErrors = checkout === 'Nice' ? {} : checkout;
+
       if(checkout === 'Nice') {
-        console.log(checkout)
-      } else {
-        this.signUpErrors = checkout
+        firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
+        .then(() => alert('Success'))
+        .catch(err => alert(err))
       }
     },
 
     signIn(user) {
       const checkout = AuthFormCheckout.signingIn(user);
-
+      this.signInErrors = checkout === 'Nice' ? {} : checkout;
+      
       if(checkout === 'Nice') {
-        console.log(checkout)
-      } else {
-        this.signInErrors = checkout
+        firebase.auth().signInWithEmailAndPassword(user.email, user.password)
+          .then(() => alert('Success'))
+          .catch(err => alert(err))
       }
     },
 
