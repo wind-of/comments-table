@@ -1,42 +1,54 @@
 <template>
   <div id="authentication">
     <keep-alive>
-      <component :is="component"
-               @sign-up="signUp($event)"
-               @sign-in="signIn($event)"
-               @toggleForm="toggleForm()"></component>
+      <SignUp v-if="isUserNew"
+              :errors="signUpErrors"
+              @sign-up="signUp($event)"
+              @toggle="toggleForm()"/>
+
+      <SignIn v-else
+              :errors="signInErrors"
+              @sign-in="signIn($event)"
+              @toggle="toggleForm()"/>
     </keep-alive>
   </div>
 </template>
 
 
 <script>
-import UserCheckout from '../utils/user-checkout'
+import AuthFormCheckout from '../utils/auth-checkout'
 
 export default {
   data() {
     return {
-      isUserNew: false
+      isUserNew: false,
+      signUpErrors: {},
+      signInErrors: {}
     }
   },
 
   methods: {
     signUp(user) {
-      const checkout = UserCheckout.signingUp(user);
+      const checkout = AuthFormCheckout.signingUp(user);
+      if(checkout === 'Nice') {
+        console.log(checkout)
+      } else {
+        this.signUpErrors = checkout
+      }
     },
 
     signIn(user) {
-      const checkout = UserCheckout.signingIn(user);
+      const checkout = AuthFormCheckout.signingIn(user);
+
+      if(checkout === 'Nice') {
+        console.log(checkout)
+      } else {
+        this.signInErrors = checkout
+      }
     },
 
     toggleForm() {
       this.isUserNew = !this.isUserNew
-    }
-  },
-
-  computed: {
-    component() {
-      return this.isUserNew ? 'SignUp' : 'SignIn';
     }
   },
 
@@ -51,6 +63,5 @@ export default {
   #authentication{
     width: 20%;
     margin: 150px auto;
-    text-align: center;
   }  
 </style>

@@ -10,6 +10,7 @@
           <i class="fas fa-envelope"></i>
         </span>
       </p>
+      <BaseError v-for="error in errors.emailErrors" :key="error">{{ error }}</BaseError>
     </div>
     <div class="field">
       <p class="control has-icons-left">
@@ -18,6 +19,7 @@
           <i class="fas fa-lock"></i>
         </span>
       </p>
+      <BaseError v-for="error in errors.passwordErrors" :key="error">{{ error }}</BaseError>
     </div>
     <div class="field">
       <p class="control has-icons-left">
@@ -34,7 +36,7 @@
     </div>
     <br>
     <div class="postscriptum">
-      <p>If you already have an account, <a href="/" @click.prevent="$emit('toggleForm')">sign in.</a></p>
+      <p>If you already have an account, <a href="/" @click.prevent="$emit('toggle')">sign in.</a></p>
     </div>
   </div>
 </template>
@@ -42,6 +44,9 @@
 
 <script>
 export default {
+  props: {
+    errors: Object
+  },
   data() {
     return {
       email: '',
@@ -51,3 +56,10 @@ export default {
   }
 }
 </script>
+
+
+<style lang="scss" scoped>
+  .postscriptum{
+    text-align: center;
+  }
+</style>
