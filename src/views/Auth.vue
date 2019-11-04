@@ -11,6 +11,7 @@
               @sign-in="signIn($event)"
               @toggle="toggleForm()"/>
     </keep-alive>
+    <button @click="test('Up')">Click</button>
   </div>
 </template>
 
@@ -29,31 +30,31 @@ export default {
   },
 
   methods: {
-    signUp(user) {
+    signUp(user, method) {
       const checkout = AuthFormCheckout.signingUp(user);
       this.signUpErrors = checkout === 'Nice' ? {} : checkout;
 
-      if(checkout === 'Nice') {
+      if (checkout === 'Nice') {
         firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
-        .then(() => alert('Success'))
-        .catch(err => alert(err))
+          .then(() => this.$router.push('/'))
+          .catch(err => alert(err))
       }
     },
 
     signIn(user) {
       const checkout = AuthFormCheckout.signingIn(user);
       this.signInErrors = checkout === 'Nice' ? {} : checkout;
-      
-      if(checkout === 'Nice') {
+
+      if (checkout === 'Nice') {
         firebase.auth().signInWithEmailAndPassword(user.email, user.password)
-          .then(() => alert('Success'))
+          .then(() => this.$router.push('/'))
           .catch(err => alert(err))
       }
     },
 
     toggleForm() {
       this.isUserNew = !this.isUserNew
-    }
+    },
   },
 
   components: {
@@ -62,6 +63,8 @@ export default {
   }
 }
 </script>
+
+
 
 <style lang="scss" scoped>
   #authentication{
