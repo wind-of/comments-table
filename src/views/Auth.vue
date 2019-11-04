@@ -11,7 +11,6 @@
               @sign-in="signIn($event)"
               @toggle="toggleForm()"/>
     </keep-alive>
-    <button @click="test('Up')">Click</button>
   </div>
 </template>
 
