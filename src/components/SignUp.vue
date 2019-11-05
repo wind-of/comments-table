@@ -30,7 +30,7 @@
       </p>
     </div>
     <div class="field">
-      <BaseButton className="button is-success" 
+      <BaseButton :className="btnClass" 
                   @click.native.prevent="$emit('sign-up', {email, password, repeatedPassword})">
       Sign up</BaseButton>
     </div>
@@ -45,13 +45,19 @@
 <script>
 export default {
   props: {
-    errors: Object
+    errors: Object,
+    loading: Boolean
   },
   data() {
     return {
       email: '',
       password: '',
       repeatedPassword: '',
+    }
+  },
+  computed: {
+    btnClass() {
+      return `button is-success ${this.loading ? 'is-loading': ''}` 
     }
   }
 }

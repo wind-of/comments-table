@@ -2,11 +2,13 @@
   <div id="authentication">
     <keep-alive>
       <SignUp v-if="isUserNew"
+              :loading="isLoading"
               :errors="signUpErrors"
               @sign-up="signUp($event)"
               @toggle="toggleForm()"/>
 
       <SignIn v-else
+              :loading="isLoading"
               :errors="signInErrors"
               @sign-in="signIn($event)"
               @toggle="toggleForm()"/>
@@ -22,6 +24,7 @@ import firebase from 'firebase'
 export default {
   data() {
     return {
+      isLoading: false,
       isUserNew: false,
       signUpErrors: {},
       signInErrors: {}
@@ -29,26 +32,39 @@ export default {
   },
 
   methods: {
-    signUp(user, method) {
+    signUp(user) {
+      this.isLoading = true;
       const checkout = AuthFormCheckout.signingUp(user);
       this.signUpErrors = checkout === 'Nice' ? {} : checkout;
 
       if (checkout === 'Nice') {
-        firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
-          .then(() => this.$router.push('/'))
+        return firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
+          .then(() => {
+            this.$router.push('/');
+            this.isLoading = false;
+          })
           .catch(err => alert(err))
       }
+      this.isLoading = false;
     },
 
     signIn(user) {
+      this.isLoading = true;
       const checkout = AuthFormCheckout.signingIn(user);
       this.signInErrors = checkout === 'Nice' ? {} : checkout;
 
       if (checkout === 'Nice') {
-        firebase.auth().signInWithEmailAndPassword(user.email, user.password)
-          .then(() => this.$router.push('/'))
-          .catch(err => alert(err))
+        return firebase.auth().signInWithEmailAndPassword(user.email, user.password)
+          .then(() => {
+            this.$router.push('/');
+            this.isLoading = false;
+          })
+          .catch(err => {
+            alert(err);
+            this.isLoading = false;
+          })
       }
+      this.isLoading = false;
     },
 
     toggleForm() {
@@ -57,8 +73,8 @@ export default {
   },
 
   components: {
-    SignUp: () => import('../components/SignUp'),
-    SignIn: () => import('../components/SignIn')
+    SignUp: () => import('@/components/SignUp'),
+    SignIn: () => import('@/components/SignIn')
   }
 }
 </script>

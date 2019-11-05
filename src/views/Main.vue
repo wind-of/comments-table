@@ -84,6 +84,10 @@ export default {
   components: {
     CTemplate: () => import('../components/CTemplate.vue'),
     CForm:     () => import('../components/CForm.vue')
+  },
+
+  beforeDestroy() {
+    console.log(this.$router, firebase.auth().currentUser)
   }
 }
 </script>

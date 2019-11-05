@@ -22,7 +22,7 @@
       <BaseError v-for="error in errors.passwordErrors" :key="error">{{ error }}</BaseError>
     </div>
     <div class="field">
-      <BaseButton className="button is-success" 
+      <BaseButton :className="btnClass" 
                   @click.native.prevent="$emit('sign-in', {email, password})">
       Sign in</BaseButton>
     </div>
@@ -37,12 +37,18 @@
 <script>
 export default {
   props: {
-    errors: Object
+    errors: Object,
+    loading: Boolean
   },
   data() {
     return {
       email: '',
       password: ''
+    }
+  },
+  computed: {
+    btnClass() {
+      return `button is-success ${this.loading ? 'is-loading': ''}` 
     }
   }
 }
