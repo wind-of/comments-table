@@ -34,7 +34,6 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   const currentUser = firebase.auth().currentUser;
   const isAuthRequired = to.matched.some(record => record.meta.requiresAuth);
-  console.log(to, currentUser, isAuthRequired);
 
   if(!currentUser && isAuthRequired) next('auth')
   else if(currentUser && !isAuthRequired) next('main')

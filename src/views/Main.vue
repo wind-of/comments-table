@@ -1,22 +1,31 @@
 <template>
   <div id="comments">
     <div class="comments-list">
-      <CTemplate v-for="comment of comments" 
-                 :comment="comment" 
-                 :key="comment.id"
-                 :errors="comment.errors.cmErrors"
-                 :isEditing="comment.isEditing"
-                 @delete="deleteComment($event.id)"
-                 @edit="editComment($event.comment)"/>
+      <CTemplate 
+          v-for="comment of comments" 
+          :comment="comment" 
+          :key="comment.id"
+          :errors="comment.errors.cmErrors"
+          :isEditing="comment.isEditing"
+          @delete="deleteComment($event.id)"
+          @edit="editComment($event.comment)"/>
     </div>
-    <CForm :state="currentState" 
-           :cmErrors="currentState.errors.cmErrors"
-           :nameErrors="currentState.errors.nameErrors"
-           @add="addComment()"/>
+    <CForm 
+        :state="currentState" 
+        :cmErrors="currentState.errors.cmErrors"
+        :nameErrors="currentState.errors.nameErrors"
+        @add="addComment()"/>
+    <div class="field">
+      <BaseButton 
+          :className="btnClass" 
+          @click.native.prevent="signOut()">
+      Sign Out</BaseButton>
+    </div>
   </div>
 </template>
 
 <script>
+import firebase from 'firebase'
 import comments from '../comments'
 import checkCMForIssues from'../utils/comment-checkout'
 
@@ -30,7 +39,8 @@ export default {
         isEditing: false,
         id: this.createID(),
         errors: {}
-      }
+      },
+      loading: false
     }
   },
 
@@ -78,16 +88,32 @@ export default {
       }
     },
 
-    deleteComment(id) {this.comments = this.comments.filter(comment => comment.id !== id)}
+    deleteComment(id) {this.comments = this.comments.filter(comment => comment.id !== id)},
+
+    signOut() {
+      this.loading = true;
+
+      return firebase.auth().signOut()
+      .then(() => {
+        this.loading = false;
+        this.$router.push('/auth');
+      })
+      .catch(err => {
+        this.loading = false;
+        alert(err)
+      })
+    }
+  },
+
+  computed: {
+    btnClass() {
+      return `button${this.lodaing ? ' is-loading' : ''}`
+    },
   },
 
   components: {
-    CTemplate: () => import('../components/CTemplate.vue'),
-    CForm:     () => import('../components/CForm.vue')
-  },
-
-  beforeDestroy() {
-    console.log(this.$router, firebase.auth().currentUser)
+    CTemplate: () => import('@/components/CTemplate.vue'),
+    CForm:     () => import('@/components/CForm.vue')
   }
 }
 </script>
@@ -96,5 +122,9 @@ export default {
 #comments{
   width: 40%;
   margin: 100px auto 25px;
+  > .field{
+    display: flex;
+    justify-content: space-around;
+  }
 }
 </style>
