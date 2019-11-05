@@ -17,7 +17,7 @@ const router = new Router({
     {
       path: '/',
       name: 'Main',
-      component: Main,
+      component: () => import('@/views/Main'),
       meta: {
         requiresAuth: true
       }
@@ -25,7 +25,7 @@ const router = new Router({
     {
       path: '/auth',
       name: 'Auth',
-      component: Auth
+      component: () => import('@/views/Auth')
     }
   ]
 })
