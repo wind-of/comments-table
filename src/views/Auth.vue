@@ -15,6 +15,7 @@
 
 <script>
 import firebase from 'firebase/app'
+import 'firebase/auth'
 import AuthFormCheckout from '@/utils/auth-checkout'
 
 export default {
