@@ -1,74 +1,64 @@
 <template>
   <div id="authentication">
     <keep-alive>
-      <SignUp v-if="isUserNew"
+      <component :is="isUserNew ? 'SignUp' : 'SignIn'"
               :loading="isLoading"
-              :errors="signUpErrors"
-              @sign-up="signUp($event)"
-              @toggle="toggleForm()"/>
-
-      <SignIn v-else
-              :loading="isLoading"
-              :errors="signInErrors"
-              @sign-in="signIn($event)"
-              @toggle="toggleForm()"/>
+              :errors="errors"
+              @sign-up="sign($event, 'create')"
+              @sign-in="sign($event, 'sign')"
+              @toggle="toggleForm()">
+      </component>
     </keep-alive>
   </div>
 </template>
 
 
 <script>
-import AuthFormCheckout from '../utils/auth-checkout'
-import firebase from 'firebase'
+import firebase from 'firebase/app'
+import AuthFormCheckout from '@/utils/auth-checkout'
 
 export default {
   data() {
     return {
       isLoading: false,
       isUserNew: false,
-      signUpErrors: {},
+      errors: {},
       signInErrors: {}
     }
   },
 
   methods: {
-    signUp(user) {
-      this.isLoading = true;
-      const checkout = AuthFormCheckout.signingUp(user);
-      this.signUpErrors = checkout === 'Nice' ? {} : checkout;
+    createUser({email, password, repeatedPassword}) {
+      return firebase.auth().createUserWithEmailAndPassword(email, password)
+          .then(() => this.$router.push('/'))
+          .catch(err => console.log(err))
+    },
+    signIn({email, password}) {
+      return firebase.auth().signInWithEmailAndPassword(email, password)
+          .then(() => this.$router.push('/'))
+          .catch(err => console.log(err))
+    },
 
-      if (checkout === 'Nice') {
-        return firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
-          .then(() => {
-            this.$router.push('/');
-            this.isLoading = false;
-          })
-          .catch(err => alert(err))
-      }
+    sign(user, method) {
+      this.isLoading = true;
+
+      const result = method === 'create' 
+        ? AuthFormCheckout.signingUp(user) 
+        : AuthFormCheckout.signingIn(user);
+
+      if(result !== 'Nice') {
+        this.isLoading = false;
+        return this.errors = result; 
+      } else this.errors = {};
+
+      method === 'create' ? this.createUser(user) : this.signIn(user)
+
       this.isLoading = false;
     },
 
-    signIn(user) {
-      this.isLoading = true;
-      const checkout = AuthFormCheckout.signingIn(user);
-      this.signInErrors = checkout === 'Nice' ? {} : checkout;
-
-      if (checkout === 'Nice') {
-        return firebase.auth().signInWithEmailAndPassword(user.email, user.password)
-          .then(() => {
-            this.$router.push('/');
-            this.isLoading = false;
-          })
-          .catch(err => {
-            alert(err);
-            this.isLoading = false;
-          })
-      }
-      this.isLoading = false;
-    },
-
-    toggleForm() {
-      this.isUserNew = !this.isUserNew
+    toggleForm() { 
+      this.isUserNew = !this.isUserNew;
+      this.errors = {};
     },
   },
 
@@ -84,6 +74,6 @@ export default {
 <style lang="scss" scoped>
   #authentication{
     width: 20%;
-    margin: 150px auto;
-  }  
+    margin: 100px auto;
+  }
 </style>

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import firebase from 'firebase'
+import firebase from 'firebase/app'
 import firebaseConfig from './firebase-config'
 import router from './router/router'
 import BASE_ICON from './base-components/BASE_ICON'

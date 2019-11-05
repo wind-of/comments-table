@@ -17,7 +17,7 @@
         @add="addComment()"/>
     <div class="field">
       <BaseButton 
-          :className="btnClass" 
+          className="button" 
           @click.native.prevent="signOut()">
       Sign Out</BaseButton>
     </div>
@@ -25,9 +25,10 @@
 </template>
 
 <script>
-import firebase from 'firebase'
-import comments from '../comments'
-import checkCMForIssues from'../utils/comment-checkout'
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import comments from '@/comments'
+import checkCMForIssues from'@/utils/comment-checkout'
 
 export default {
   data() {
@@ -40,7 +41,6 @@ export default {
         id: this.createID(),
         errors: {}
       },
-      loading: false
     }
   },
 
@@ -58,9 +58,9 @@ export default {
     createID() {return Math.floor(Math.random() * 1000000000)},
 
     addComment() {
-      const checkout = checkCMForIssues(this.currentState);
+      const result = checkCMForIssues(this.currentState);
 
-      if(checkout === 'Nice') {
+      if(result === 'Nice') {
         this.currentState.errors = {};
 
         this.comments.unshift(Object.assign({}, this.currentState));
@@ -68,8 +68,8 @@ export default {
         this.refreshState();
       } else { 
         this.currentState.errors = {
-          cmErrors: checkout.cmErrors,
-          nameErrors: checkout.nameErrors
+          cmErrors: result.cmErrors,
+          nameErrors: result.nameErrors
         }
       }
     },
@@ -77,13 +77,13 @@ export default {
     editComment(comment) {
       if(comment.isEditing === false) return comment.isEditing = !comment.isEditing
       
-      const checkout = checkCMForIssues(comment);
+      const result = checkCMForIssues(comment);
 
-      if (checkout === 'Nice') { 
+      if (result === 'Nice') { 
         return comment.isEditing = !comment.isEditing 
       } else {
         comment.errors = {
-          cmErrors: checkout.cmErrors
+          cmErrors: result.cmErrors
         }
       }
     },
@@ -91,24 +91,10 @@ export default {
     deleteComment(id) {this.comments = this.comments.filter(comment => comment.id !== id)},
 
     signOut() {
-      this.loading = true;
-
       return firebase.auth().signOut()
-      .then(() => {
-        this.loading = false;
-        this.$router.push('/auth');
-      })
-      .catch(err => {
-        this.loading = false;
-        alert(err)
-      })
+        .then(() => this.$router.push('/auth'))
+        .catch(err => alert(err))
     }
-  },
-
-  computed: {
-    btnClass() {
-      return `button${this.lodaing ? ' is-loading' : ''}`
-    },
   },
 
   components: {
